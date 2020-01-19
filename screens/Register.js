@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {View, Text, TextInput, StyleSheet, Button, TouchableOpacity, Keyboard, TouchableWithoutFeedback} from 'react-native';
 import Firebase from '../firebase/Firebase';
 
@@ -7,8 +7,18 @@ import { connect } from 'react-redux'
 import { updateEmail, updatePassword, register } from '../actions/user'
 
 class Register extends React.Component {
+    constructor(props){
+        super(props)
+        this.state = {
+            confirmPassword: ''
+        }
+    }
 
     registerHandle = () => {
+        if(this.state.confirmPassword != this.props.user.password){          
+            alert("Password an't match")
+            return
+        }
         this.props.register()
     }
 
@@ -29,6 +39,13 @@ class Register extends React.Component {
                         value = {this.props.user.password}
                         onChangeText = {(password) => this.props.updatePassword(password)}
                         placeholder = 'Password'
+                        secureTextEntry = {true}
+                    />
+                    <TextInput
+                        style = {styles.inputBox}
+                        value = {this.state.passwordConfirm}
+                        onChangeText = {(confirmPassword) => {this.setState({confirmPassword: confirmPassword})}}
+                        placeholder = 'Confirm Password'
                         secureTextEntry = {true}
                     />
                     <TouchableOpacity style={styles.button} onPress={this.registerHandle}>
@@ -95,14 +112,3 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(Register)
-
-/*
-<TextInput
-style = {styles.inputBox}
-value = {this.props.user.confirmPassword}
-onChangeText = {(confirmPassword) => this.props.updateConfirmPassword(confirmPassword)}
-placeholder = 'Confirm Password'
-secureTextEntry = {true}
-/>
-
-*/

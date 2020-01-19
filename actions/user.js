@@ -10,7 +10,7 @@ export const REGISTER = 'REGISTER'
 export const updateEmail = email => {
     return{
         type: UPDATE_EMAIL,
-        payload: email    
+        payload: email
     }
 }
 
@@ -26,9 +26,9 @@ export const login = () => {
         try{
             const {email, password} = getState().user
             const response = await Firebase.auth().signInWithEmailAndPassword(email, password)
-            dispatch({type: LOGIN, payload: response.user})    
+            dispatch({type: LOGIN, payload: response.user})   
         }catch(e){
-            console.log(e)
+            alert(e)
         }
     }
 }
@@ -40,7 +40,7 @@ export const register = () => {
             const response = await Firebase.auth().createUserWithEmailAndPassword(email, password)
             dispatch({type: REGISTER, payload: response.user})
         }catch(e){
-            console.log(e)
+            alert(e)
         }
     }
 }
