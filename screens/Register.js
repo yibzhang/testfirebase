@@ -2,33 +2,14 @@ import React from 'react';
 import {View, Text, TextInput, StyleSheet, Button, TouchableOpacity, Keyboard, TouchableWithoutFeedback} from 'react-native';
 import Firebase from '../firebase/Firebase';
 
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+import { updateEmail, updatePassword, register } from '../actions/user'
+
 class Register extends React.Component {
 
-    constructor (props) {
-        super(props)
-
-        this.state = {
-          email: '',
-          password: '',
-          confirmPassword: ''
-        }
-    }
-
     registerHandle = () => {
-        if(this.state.password != this.state.confirmPassword){
-            this.alertErrorMessage("Password does't match");
-            return;
-        }
-
-        Firebase
-        .auth()
-        .createUserWithEmailAndPassword(this.state.email, this.state.password)
-        .then(() => this.props.navigation.navigate('Profile'))
-        .catch(error => this.alertErrorMessage(error))
-    }
-
-    alertErrorMessage = (error) => {
-        alert(error);
+        this.props.register()
     }
 
     render(){
@@ -37,24 +18,17 @@ class Register extends React.Component {
                 <View style={styles.container}>
                     <TextInput
                         style = {styles.inputBox}
-                        value = {this.state.email}
-                        onChangeText = {(email) => this.setState({email: email})}
+                        value = {this.props.user.email}
+                        onChangeText = {(email) => this.props.updateEmail(email)}
                         placeholder = 'Email'
                         autoCapitalize = 'none'
                         keyboardType = 'email-address'
                     />
                     <TextInput
                         style = {styles.inputBox}
-                        value = {this.state.password}
-                        onChangeText = {(password) => this.setState({password: password})}
+                        value = {this.props.user.password}
+                        onChangeText = {(password) => this.props.updatePassword(password)}
                         placeholder = 'Password'
-                        secureTextEntry = {true}
-                    />
-                    <TextInput
-                        style = {styles.inputBox}
-                        value = {this.state.confirmPassword}
-                        onChangeText = {(confirmPassword) => this.setState({confirmPassword: confirmPassword})}
-                        placeholder = 'Confirm Password'
                         secureTextEntry = {true}
                     />
                     <TouchableOpacity style={styles.button} onPress={this.registerHandle}>
@@ -107,4 +81,28 @@ const styles = StyleSheet.create({
     }
 });
 
-export {Register};
+const mapDispatchToProps = dispatch =>{
+    return bindActionCreators({updateEmail, updatePassword, register}, dispatch)
+}
+
+const mapStateToProps = state => {
+    return {
+        user: state.user
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(Register)
+
+/*
+<TextInput
+style = {styles.inputBox}
+value = {this.props.user.confirmPassword}
+onChangeText = {(confirmPassword) => this.props.updateConfirmPassword(confirmPassword)}
+placeholder = 'Confirm Password'
+secureTextEntry = {true}
+/>
+
+*/
