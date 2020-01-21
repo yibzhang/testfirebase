@@ -3,7 +3,7 @@ import {View, Text, TextInput, StyleSheet, Button, TouchableOpacity, Keyboard, T
 
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { updateEmail, updatePassword, login } from '../actions/user'
+import { updateEmail, updatePassword, login, getUser } from '../actions/user'
 
 class Login extends React.Component {
 
@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
 });
 
 const mapDispatchToProps = dispatch =>{
-    return bindActionCreators({updateEmail, updatePassword, login}, dispatch)
+    return bindActionCreators({updateEmail, updatePassword, login, getUser}, dispatch)
 }
 
 const mapStateToProps = state => {
